@@ -1,0 +1,39 @@
+body{
+  background: royalblue;
+  text-align: right;
+}
+h1{
+  text-align: center;
+  padding: 1%;
+  font-size: 2.5rem;
+  color: #640964;
+  font-weight: bolder;
+  margin: 1%;
+}
+form {
+  display: flex;
+  flex-direction: column;
+  justify-items: right;
+  width: 90%;
+  max-width: 300px;
+  margin: 0 auto;
+
+}
+label {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 5%;
+  font-size: 1.5rem;
+
+
+}
+button{
+  padding: 5%;
+  background: peru;
+  color: white;
+}
+input{
+  padding: 3%;
+  background: plum;
+}
