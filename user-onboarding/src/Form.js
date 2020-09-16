@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import Axios from 'axios';
+import axios from 'axios';
 import * as yup from 'yup';
 
 const formSchema = yup.object().shape({
-    name: yup.string().required(),
-    email: yup.string().email().required(),
-    password: yup.string().required(),
+    name: yup.string().required('Name is required'),
+    email: yup.string().email('This is not a valid email').required('Email is required'),
+    password: yup.string().required('Password is required').min(7, 'Password must be atleast 7 chars long.'),
     terms: yup.boolean().oneOf([true], 'Please agree to the terms of use')
 });
 
 
 
 
-export default function Form () {
+export default function Form ({users, setUsers}) {
 
     const [formState, setFormState] = useState({
         name: "",
@@ -20,11 +20,11 @@ export default function Form () {
         password: "",
         terms: false
     });
-    const [buttonDisabled, setButonDisabled] = useState(true);
+    const [buttonDisabled, setButtonDisabled] = useState(true);
 
     useEffect(() => {
         formSchema.isValid(formState).then(valid => {
-            setButonDisabled(!valid);
+            setButtonDisabled(!valid);
         });
     }, [formState]);
 
@@ -67,7 +67,7 @@ export default function Form () {
     const formSubmit = event => {
         event.preventDefault();
         console.log("form submitted");
-        Axios
+        axios
         .post("https://reqres.in/api/users", formState)
         .then(Response => console.log(Response))
         .catch(err => console.log(err));
@@ -75,39 +75,41 @@ export default function Form () {
 
     return (
         <form onSubmit={formSubmit}>
-            <label htmlFor="name">Name</label>
+            <label htmlFor="name">Name
             <input type="text" name="name" id="name" value={formState.name}
             onChange={inputChange}
              />
+             </label>
             <br />
 
             <label htmlFor="email">Email
             {errorState.email.length > 0 ? (
           <p className="error">{errorState.email}</p>
         ) : null}
-            </label>
+            
             <input type="text" name="email" id="email" value={formState.email}
             onChange={inputChange}
-            />
+            /></label>
             <br/>
 
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password">Password
             <input type="password" name="password" id="password" value={formState.password}
             onChange={inputChange}
-            />
+            /></label>
             <br/>
 
             <label htmlFor="terms">Terms & Conditions
             {errorState.terms.length > 0 ? (
           <p className="error">{errorState.terms}</p>
         ) : null}
-        </label>
+        
             <input type="checkbox" id="terms" name="terms" checked={formState.terms}
             onChange={inputChange}
-            />
+            /></label>
             <br/>
 
             <button disabled={buttonDisabled}>Submit</button>
+            <pre>{JSON.stringify(users, null, 2)}</pre>
         </form>
     );
 }
